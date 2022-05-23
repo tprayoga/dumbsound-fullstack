@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const [state] = useContext(UserContext)
-  const [play, setPlay] = useState([])
   let navigate = useNavigate()
 
   let {data : musics} = useQuery ("musicsCache", async()=>{
@@ -26,14 +25,7 @@ const Home = () => {
     }
   })
 
-  const handlePlay = (music)=>{
-    if (state.user.statusPayment === "Active") {
-      setPlay([audioList[music]])
-      console.log(state);
-    } else  {
-      navigate("/pay")
-    }
-  }
+
   return (
     <div style={{backgroundColor:"#161616"}}>
         <div className='Background'>
@@ -51,7 +43,7 @@ const Home = () => {
         <div className='container-fluid ' style={{marginTop:"30px"}}>
           <div className='d-flex row ms-3'>
             {musics?.map((item,index)=>{
-              return <Music handlePlay={handlePlay} key={index} item={item}/>
+              return <Music key={index} item={item}/>
             })}
           </div>
           

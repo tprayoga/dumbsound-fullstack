@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Attc from "../assets/interface.png"
 import { useNavigate } from "react-router-dom";
@@ -7,40 +7,57 @@ import { API } from "../config/api";
 import { Alert } from "@mui/material";
 
 const Addmusic = () => {
+  const [artis, setArtis] = useState([])
   const [form, setForm] = useState({
     title:"",
     year:"",
     thumbnail:"",
-    attache:""
+    attache:"",
+    idArtis:""
   })
 
-  const {title, year,thumbnail,attache} = form
+  const {title, year,thumbnail,attache, idArtis} = form
+  const artist = async () => {
+    const response = await API.get("/artiss")
+    console.log(response.data.data.artiss);
+    setArtis(response.data.data.artiss)
+  }
 
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name] : e.target.type ==="file" ? e.target.files : e.target.value
+      [e.target.name] : e.target.id === "attache" ? e.target.files : e.target.value && e.target.id === "thumbnail"? e.target.files:e.target.value
     })
   }
 
   const handleSubmit = useMutation(async(e)=>{
+    
     try{
-      e.preventDefault()
-      const formData = new FormData();
-      formData.set('attache', form.attache[0], form.attache[0].name);
-      formData.set('thumbnail', form.thumbnail[0], form.thumbnail[0].name);
-      formData.set('title', form.title);
-      formData.set('year', form.year);
-
+      e.preventDefault();
       const config = {
         headers : {
           'Content-type': 'multipart/form-data',
         }
       }
-      const body = JSON.stringify(form)
+      console.log(form);
+      const formData = new FormData();
+      formData.set("title", form.title);
+      formData.set("year", form.year);
+      formData.set("attache", form.attache[0], form.attache[0].name);
+      formData.set("thumbnail", form.thumbnail[0], form.thumbnail[0].name);
+      formData.set("idArtis", form.idArtis);
 
-      const response = await API.post("/music", body, config)
+      const response = await API.post("/music", formData, config)
       console.log(response);
+      setForm({
+        title: "",
+        year: "",
+        thumbnail: "",
+        attache: "",
+        idArtis: "",
+      });
+
+
 
       if (response.data.status === "success") {
         const alert = (
@@ -64,6 +81,10 @@ const Addmusic = () => {
     }
   })
 
+  useEffect(() => {
+    artist();
+  }, []);
+
   const [message, setMessage] = useState(null);
   return (
     <div style={{ backgroundColor: "#161616", height: "100vh" }}>
@@ -73,7 +94,7 @@ const Addmusic = () => {
       <div className="container">
       {message && message}
 
-        <form className="mt-5 d-grid" onSubmit={(e)=> handleSubmit.mutate(e)}>
+        <form className="mt-5 d-grid" onSubmit={(e) => handleSubmit.mutate(e)}>
         <h1 className="mb-4" style={{
             color: "white",
             fontWeight: "700",
@@ -101,9 +122,9 @@ const Addmusic = () => {
                 borderRadius:"5px",
                 width:"215px"
               }}
-              for="formFile"
+              for="thumbnail"
             ><div className="mt-1 text-light">Thumbnail.jpg</div><img src={Attc} alt="atc" className="mt-1" style={{height:"28px", objectFit:"cover"}}/></label>
-            <input name="thumbnail" onChange={handleChange} type="file" id="formFile" hidden />
+            <input id="thumbnail" name="thumbnail" onChange={handleChange} type="file"  hidden />
           </div>
           <input
             type="text"
@@ -117,23 +138,17 @@ const Addmusic = () => {
               backgroundColor: " rgba(210, 210, 210, 0.25)",
             }}
           ></input>
-          <select
+          <select onChange={handleChange} name="idArtis"
             className="form-select text-light mb-3"
-            name="artis"
             aria-label="Default select example"
             style={{
               backgroundColor: " rgba(210, 210, 210, 0.25)",
             }}
           >
-            <option className="text-dark" selected>
-              Singer
-            </option>
-            <option className="text-dark" value="1">
-              Male
-            </option>
-            <option className="text-dark" value="2">
-              Female
-            </option>
+  
+            {artis.map((item)=>(
+              <option key={item.id} name="type" value={item.id}>{item.name}</option>
+            ))}
           </select>
           <label className="d-flex justify-content-around"
               style={{
@@ -144,9 +159,9 @@ const Addmusic = () => {
                 borderRadius:"5px",
                 width:"113px"
               }}
-              for="formFile"
+              for="attache"
             ><div className="mt-1 text-light">Attache.mp3</div></label>
-            <input name="attache" onChange={handleChange} type="file" id="formFile" hidden />
+            <input id="attache" name="attache" onChange={handleChange} type="file" hidden />
           <div className="text-center">
             <button
               className="btn btn-danger mt-3"

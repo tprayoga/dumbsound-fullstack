@@ -27,9 +27,12 @@ const Navbar = () => {
   const [state, dispatch] = useContext(UserContext)
   const [isLoggin, setIsLogin] = useState(false)
   console.log(isLoggin);
+  
   useEffect(()=>{
     if (state.isLogin === true) {
       setIsLogin (true)
+    }else{
+      setIsLogin(false)
     }
   },[])
 
@@ -39,6 +42,7 @@ const Navbar = () => {
       setIsAdmin (true)
     }
   },[])
+
   const logout = () => {
     dispatch({
       type : "LOGOUT"
