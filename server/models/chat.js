@@ -11,6 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      chat.belongsTo(models.user, {
+        as: "sender",
+        foreignKey: {
+          name: "idSender",
+        },
+      });
+      
+      chat.belongsTo(models.user, {
+        as: "recipient",
+        foreignKey: {
+          name: "idRecipient",
+        },
+      });
     }
   }
   chat.init({

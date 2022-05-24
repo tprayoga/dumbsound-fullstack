@@ -1,8 +1,97 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Datauser } from "../components/dataDummys";
+import { UserContext } from "../context/userContext";
+import { API } from "../config/api";
 
 const Transactions = () => {
+  const [state] = useContext(UserContext)
+  const [transactions, setTransactions] = useState([]);
+
+  let fetchTransaction = async () => {
+    const response = await API.get("/transactions");
+    setTransactions(response.data.data);
+  };
+
+  // Set Duration
+  const remainingActive = (startDate, dueDate, idTransaction, idUser) => {
+    if (!startDate && !dueDate) {
+      return 0;
+    }
+
+    const date1 = new Date();
+    const date2 = new Date(dueDate);
+    const Difference_In_Time = date2.getTime() - date1.getTime();
+    const Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));
+    // Jika Masa aktif telah habis
+    if (Difference_In_Days === 0) {
+      // Delete Transaction
+      const deleteTransaction = async () => {
+        try {
+          console.log("Hapus Transaksi & ubah status user Berhasi!");
+
+          const config = {
+            headers: {
+              Authorization: "Basic " + localStorage.token,
+              "Content-type": "application/json",
+            },
+          };
+
+          // Delete Transaction
+          await API.delete("transaction/" + idTransaction, config);
+
+          let setStatusPayment = {
+            setStatusPayment: "Not Active",
+          };
+
+          setStatusPayment = JSON.stringify(setStatusPayment);
+
+          await API.patch("user/" + idUser,setStatusPayment, config);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      deleteTransaction();
+      return 0;
+    }
+    return Difference_In_Days;
+  };
+
+  // Delete Transaksi
+  const deleteTransaction = async (idTransaction, idUser) => {
+    try {
+      console.log("Hapus Transaksi & ubah status user Berhasi!");
+
+      const config = {
+        headers: {
+          Authorization: "Basic " + localStorage.token,
+          "Content-type": "application/json",
+        },
+      };
+
+      // Delete Transaction
+      await API.delete("transaction/" + idTransaction, config);
+
+      // Ubah status subscribe di user jadi false
+      let setStatusPayment = {
+        setStatusPayment: "Not Active",
+      };
+
+      setStatusPayment = JSON.stringify(setStatusPayment);
+
+      await API.patch("user/" + idUser, setStatusPayment, config);
+
+      fetchTransaction();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
+
   return (
     <div style={{ backgroundColor: "#161616", height: "100vh" }}>
       <div>
@@ -31,14 +120,14 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody>
-                {Datauser.map((item, index)=>{
+                {transactions?.map((item, index)=>{
                     return (
                         <tr key={index}>
                             <td>{index + 1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.remaing}</td>
+                            <td>{item.user.fullName}</td>
+                            <td>{remainingActive(item?.startDate, item?.dueDate, item.id, item.user?.id)}</td>
+                            <td className={`status-${item.user.statusPayment}`}>{item.user.statusPayment}</td>
                             <td className={`status-${item.status}`}>{item.status}</td>
-                            <td className={`status-${item.payment}`}>{item.payment}</td>
                         </tr>
                     )
                 })}

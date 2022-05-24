@@ -11,7 +11,6 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import Logo from "../assets/Logo.png";
 import Login from "./Login";
-import "./Navbar";
 import Register from "./Register";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Music from "../assets/Music.png";
@@ -24,36 +23,36 @@ import { authActions } from "../redux/auth";
 import { UserContext } from "../context/userContext";
 
 const Navbar = () => {
-  const [state, dispatch] = useContext(UserContext)
-  const [isLoggin, setIsLogin] = useState(false)
+  const [state, dispatch] = useContext(UserContext);
+  const [isLoggin, setIsLogin] = useState(false);
   console.log(isLoggin);
-  
-  useEffect(()=>{
-    if (state.isLogin === true) {
-      setIsLogin (true)
-    }else{
-      setIsLogin(false)
-    }
-  })
 
-  const [isAdmin, setIsAdmin] = useState(false)
-  useEffect(()=>{
-    if (state.user.status === "admin") {
-      setIsAdmin (true)
+  useEffect(() => {
+    if (state.isLogin === true) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
     }
-  })
+  });
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (state.user.status === "admin") {
+      setIsAdmin(true);
+    }
+  });
 
   const logout = () => {
     dispatch({
-      type : "LOGOUT"
-    })
-  }
+      type: "LOGOUT",
+    });
+  };
   const [openLogin, setOpen] = useState(false);
   const [openRegister, setRegister] = useState(false);
   let navigate = useNavigate();
   const home = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -103,6 +102,12 @@ const Navbar = () => {
                   aria-labelledby="dropdownMenuButton1"
                 >
                   <li>
+                    <Link class="dropdown-item" to="/transaction">
+                      <img className="me-2" src={Bill} />
+                      Transaction
+                    </Link>
+                  </li>
+                  <li>
                     <Link class="dropdown-item" to="/add-music">
                       <img className="me-2" src={Music} />
                       Add Music
@@ -115,7 +120,11 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <div style={{cursor:"pointer"}} class="dropdown-item" onClick={logout}>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      class="dropdown-item"
+                      onClick={logout}
+                    >
                       <img className="me-2" src={Loguot} />
                       Logout
                     </div>
@@ -133,7 +142,11 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <div style={{cursor:"pointer"}} class="dropdown-item" onClick={logout}>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      class="dropdown-item"
+                      onClick={logout}
+                    >
                       <img className="me-2" src={Loguot} />
                       Logout
                     </div>

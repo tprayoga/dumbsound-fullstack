@@ -188,7 +188,7 @@ exports.notification = async (req, res) => {
         // TODO set transaction status on your database to 'challenge'
         // and response with 200 OK
         // sendEmail("pending", orderId);
-        updateTransaction("pending", orderId, false, statusResponse?.payment_type);
+        updateTransaction("Pending", orderId, false, statusResponse?.payment_type);
         res.status(200);
       } else if (fraudStatus == "accept") {
         // TODO set transaction status on your database to 'success'
@@ -209,11 +209,11 @@ exports.notification = async (req, res) => {
       // sendEmail("failed", orderId);
       updateTransaction("failed", orderId, false, statusResponse?.payment_type);
       res.status(200);
-    } else if (transactionStatus == "pending") {
+    } else if (transactionStatus == "Pending") {
       // TODO set transaction status on your database to 'pending' / waiting payment
       // and response with 200 OK
       // sendEmail("pending", orderId);
-      updateTransaction("pending", orderId, false, statusResponse?.payment_type);
+      updateTransaction("Pending", orderId, false, statusResponse?.payment_type);
       res.status(200);
     }
   } catch (error) {
