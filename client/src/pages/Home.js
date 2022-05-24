@@ -2,14 +2,19 @@ import React, { useContext, useState } from 'react'
 import Music from '../components/music'
 import Navbar from '../components/Navbar'
 import "./Home.css"
-import ReactJkMusicPlayer from "react-jinke-music-player"
+import musicPlayer from '../components/musicPlayer'
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
 import { UserContext } from '../context/userContext'
 import { useQuery } from 'react-query'
 import { API } from '../config/api'
 import { useNavigate } from 'react-router-dom'
+import { AppBar, Toolbar } from '@mui/material'
 
 const Home = () => {
   const [state] = useContext(UserContext)
+  const [musicId, setMusicId] = useState("");
+  console.log(musicId);
   let navigate = useNavigate()
 
   let {data : musics} = useQuery ("musicsCache", async()=>{
@@ -43,13 +48,23 @@ const Home = () => {
         <div className='container-fluid ' style={{marginTop:"30px"}}>
           <div className='d-flex row ms-3'>
             {musics?.map((item,index)=>{
-              return <Music key={index} item={item}/>
+              return <Music setMusicId={setMusicId} key={index} item={item}/>
             })}
           </div>
-          
-        <ReactJkMusicPlayer/>
-      
         </div>
+        {musicId === "" ? (
+          <></>
+        ) : (
+          <AppBar>
+            <Toolbar>
+              <div>Gaass</div>
+              <div>
+                <p>{musicId?.title} - {musicId?.artis.name}</p>
+            </div>
+            <AudioPlayer autoPlay src={musicId?.attache} layout="horizontal" className="player" />
+            </Toolbar>
+          </AppBar>
+        )}
     </div>
   )
 }

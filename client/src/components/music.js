@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Register from "./Register";
 import { UserContext } from "../context/userContext";
 
-const Music = ({item,handlePlay,index}) => {
+const Music = ({item, setMusicId}) => {
   const [state, dispatch] = useContext(UserContext)
   const [isLogin, setIsLogin] = useState(false)
   useEffect(()=>{
@@ -19,7 +19,7 @@ const Music = ({item,handlePlay,index}) => {
     <Card
       className="col-xs-1 m-1"
       sx={{ width: "192px", height: "240px", backgroundColor: "#212529" }}>
-        {isLogin?(      <CardActionArea onClick={() => handlePlay(index)} > 
+        {isLogin?(      <CardActionArea onClick={() => setMusicId(item)} > 
         <CardMedia
           height="152px"
           component="img"
