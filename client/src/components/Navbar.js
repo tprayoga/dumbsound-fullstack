@@ -47,7 +47,6 @@ const Navbar = () => {
     dispatch({
       type : "LOGOUT"
     })
-    navigate("/")
   }
   const [openLogin, setOpen] = useState(false);
   const [openRegister, setRegister] = useState(false);
