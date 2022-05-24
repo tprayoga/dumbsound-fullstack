@@ -11,18 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-        transaction.belongsTo(models.premium,{
-          as:"premium",
-          foreignKey:{
-            name:"idPremium"
-          }
-        })
-        transaction.belongsTo(models.user,{
-          as:"user",
-          foreignKey:{
-            name:"idBuyer"
-          }
-        })
+      transaction.belongsTo(models.user, {
+        as: "user",
+        foreignKey: {
+          name: "userId",
+        },
+      });
     }
   }
   transaction.init({

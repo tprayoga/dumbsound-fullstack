@@ -136,7 +136,7 @@ const Login = ({ open, onClose }) => {
             Don't have an account ? Klik 
             <Link
               href="#"
-              onClick={() => setOpen(true)}
+              onClick={() => setOpen(true) && onClose(onClose)}
               underline="none"
               style={{
                 fontWeight: 400,

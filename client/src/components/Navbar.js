@@ -34,14 +34,14 @@ const Navbar = () => {
     }else{
       setIsLogin(false)
     }
-  },[])
+  })
 
   const [isAdmin, setIsAdmin] = useState(false)
   useEffect(()=>{
     if (state.user.status === "admin") {
       setIsAdmin (true)
     }
-  },[])
+  })
 
   const logout = () => {
     dispatch({
@@ -51,7 +51,9 @@ const Navbar = () => {
   const [openLogin, setOpen] = useState(false);
   const [openRegister, setRegister] = useState(false);
   let navigate = useNavigate();
-
+  const home = () => {
+    navigate("/")
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -66,6 +68,7 @@ const Navbar = () => {
           </Link>
           <Typography
             component="div"
+            onClick={home}
             style={{ cursor: "pointer" }}
             sx={{
               flexGrow: 1,

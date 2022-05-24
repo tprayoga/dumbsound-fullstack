@@ -1,7 +1,6 @@
 const { transaction, user } = require("../../models");
 
 const midtransClient = require("midtrans-client");
-const nodemailer = require("nodemailer");
 
 // GET TRANSACTIONS
 exports.getTransactions = async (req, res) => {
@@ -65,6 +64,7 @@ exports.getTransaction = async (req, res) => {
 // =========== DELETE TRANSACTION =============
 exports.deleteTransaction = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   try {
     await transaction.destroy({
       where: {
@@ -74,7 +74,6 @@ exports.deleteTransaction = async (req, res) => {
 
     res.status(200).send({
       status: "Delete Transaction Success",
-      data,
     });
   } catch (error) {
     console.log(error);
@@ -92,7 +91,7 @@ exports.addTransaction = async (req, res) => {
     let data = req.body;
 
     data = {
-      id: parseInt(data.idPremium + Math.random().toString().slice(3, 8)),
+      id: parseInt(Math.random().toString().slice(3, 8)),
       ...data,
       userId: req.user.id,
       status: "pending",
@@ -124,7 +123,7 @@ exports.addTransaction = async (req, res) => {
     let parameter = {
       transaction_details: {
         order_id: newData.id,
-        gross_amount: newData.price,
+        gross_amount: data.price,
       },
       credit_card: {
         secure: true,
@@ -132,7 +131,6 @@ exports.addTransaction = async (req, res) => {
       customer_details: {
         full_name: buyerData?.name,
         email: buyerData?.email,
-        phone: buyerData?.phone,
       },
     };
 
@@ -143,15 +141,12 @@ exports.addTransaction = async (req, res) => {
       status: "Pending",
       message: "Pending transaction payment gateway",
       payment,
-      premium:{
-          id: data.idPremium
-      }
     });
   } catch (error) {
     console.log(error);
-    res.status(404).send({
+    res.status(400).send({
       status: "Payment Failed",
-      message: "Server Error",
+      message: "Disini",
     });
   }
 };
@@ -227,12 +222,12 @@ exports.notification = async (req, res) => {
   }
 };
 
-const updateTransaction = async () => {
+// Create function for handle transaction update status
+const updateTransaction = async (status, transactionId, subscribe, paymentMethod, startDate, grossAmount) => {
   try {
     await transaction.update(
       {
         status,
-        paymentMethod,
       },
       {
         where: {
@@ -241,8 +236,106 @@ const updateTransaction = async () => {
       }
     );
 
+    // const dueDate = new Date(startDate);
+    // switch (grossAmount) {
+    //   case grossAmount === "7500.00":
+    //     dueDate.setDate(dueDate.getDate() + 7);
 
+    //     await transaction.update(
+    //       {
+    //         startDate,
+    //         dueDate,
+    //       },
+    //       {
+    //         where: {
+    //           id: transactionId,
+    //         },
+    //       }
+    //     );
+    //     break;
+    //   case grossAmount === "20000.00":
+    //     dueDate.setDate(dueDate.getDate() + 30);
 
+    //     await transaction.update(
+    //       {
+    //         startDate,
+    //         dueDate,
+    //       },
+    //       {
+    //         where: {
+    //           id: transactionId,
+    //         },
+    //       }
+    //     );
+    //     break;
+    //   case grossAmount === "40000.00":
+    //     dueDate.setDate(dueDate.getDate() + 90);
+
+    //     await transaction.update(
+    //       {
+    //         startDate,
+    //         dueDate,
+    //       },
+    //       {
+    //         where: {
+    //           id: transactionId,
+    //         },
+    //       }
+    //     );
+    //     break;
+    // }
+
+    // Kondisi untuk menentukan durasi
+    let dueDate;
+    if (grossAmount) {
+      if (grossAmount === "7500.00") {
+        dueDate = new Date(startDate);
+        dueDate.setDate(dueDate.getDate() + 7);
+
+        await transaction.update(
+          {
+            startDate,
+            dueDate,
+          },
+          {
+            where: {
+              id: transactionId,
+            },
+          }
+        );
+      } else if (grossAmount === "20000.00") {
+        dueDate = new Date(startDate);
+        dueDate.setDate(dueDate.getDate() + 30);
+
+        await transaction.update(
+          {
+            startDate,
+            dueDate,
+          },
+          {
+            where: {
+              id: transactionId,
+            },
+          }
+        );
+      } else if (grossAmount === "40000.00") {
+        dueDate = new Date(startDate);
+        dueDate.setDate(dueDate.getDate() + 90);
+
+        await transaction.update(
+          {
+            startDate,
+            dueDate,
+          },
+          {
+            where: {
+              id: transactionId,
+            },
+          }
+        );
+      }
+    }
+    // Get transaksi untuk update user
     const getUserId = await transaction.findOne({
       where: {
         id: transactionId,
@@ -261,3 +354,85 @@ const updateTransaction = async () => {
     console.log(error);
   }
 };
+
+// // Handle send email
+// const sendEmail = async (status, transactionId) => {
+//   // Config service and email account
+//   const transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//       user: process.env.SYSTEM_EMAIL,
+//       pass: process.env.SYSTEM_PASSWORD,
+//     },
+//   });
+
+//   // Get transaction data
+//   let data = await transaction.findOne({
+//     where: {
+//       id: transactionId,
+//     },
+//     attributes: {
+//       exclude: ["createdAt", "updatedAt", "password"],
+//     },
+//     include: [
+//       {
+//         model: user,
+//         as: "user",
+//         attributes: {
+//           exclude: ["createdAt", "updatedAt", "password", "status"],
+//         },
+//       },
+//       // {
+//       //   model: product,
+//       //   as: "product",
+//       //   attributes: {
+//       //     exclude: ["createdAt", "updatedAt", "idUser", "qty", "price", "desc"],
+//       //   },
+//       // },
+//     ],
+//   });
+
+//   data = JSON.parse(JSON.stringify(data));
+
+//   console.log("Buyer: ", data);
+
+//   // Email options content
+//   const mailOptions = {
+//     from: process.env.SYSTEM_EMAIL,
+//     to: data?.buyer?.email,
+//     subject: "Payment status",
+//     text: "Your payment is <br />",
+//     html: `<!DOCTYPE html>
+//             <html lang="en">
+//               <head>
+//                 <meta charset="UTF-8" />
+//                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+//                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+//                 <title>Document</title>
+//                 <style>
+//                   h1 {
+//                     color: brown;
+//                   }
+//                 </style>
+//               </head>
+//               <body>
+//                 <h2>Product payment :</h2>
+//                 <ul style="list-style-type:none;">
+//                 </ul>
+//               </body>
+//             </html>`,
+//   };
+
+//   // Send an email if there is a change in the transaction status
+//   if (data.status != status) {
+//     transporter.sendMail(mailOptions, (err, info) => {
+//       if (err) throw err;
+//       console.log("Email sent: " + info.response);
+
+//       return res.send({
+//         status: "Success",
+//         message: info.response,
+//       });
+//     });
+//   }
+// };

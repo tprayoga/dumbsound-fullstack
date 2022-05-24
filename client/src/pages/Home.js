@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Music from '../components/music'
 import Navbar from '../components/Navbar'
 import "./Home.css"
-import musicPlayer from '../components/musicPlayer'
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { UserContext } from '../context/userContext'
@@ -16,6 +15,16 @@ const Home = () => {
   const [musicId, setMusicId] = useState("");
   console.log(musicId);
   let navigate = useNavigate()
+  const [isLoggin, setIsLogin] = useState(false)
+  console.log(isLoggin);
+  
+  useEffect(()=>{
+    if (state.isLogin === true) {
+      setIsLogin (true)
+    }else{
+      setIsLogin(false)
+    }
+  })
 
   let {data : musics} = useQuery ("musicsCache", async()=>{
     const response = await API.get("/musics")
@@ -52,10 +61,11 @@ const Home = () => {
             })}
           </div>
         </div>
-        {musicId === "" ? (
+        {isLoggin ? (<>
+          {musicId === "" ? (
           <></>
         ) : (
-          <AppBar>
+          <div>
             <Toolbar>
               <div>Gaass</div>
               <div>
@@ -63,8 +73,10 @@ const Home = () => {
             </div>
             <AudioPlayer autoPlay src={musicId?.attache} layout="horizontal" className="player" />
             </Toolbar>
-          </AppBar>
+          </div>
         )}
+        </>): (<></>)}
+
     </div>
   )
 }

@@ -3,7 +3,7 @@ const router = express.Router();
 const { uploadFile } = require('../middlewares/uploadFile')
 const { addUser, getUsers, getUser, updateUser, deleteUser } = require("../controllers/user");
 const { addArtis, getArtis } = require('../controllers/artist')
-const { addPremium, getPremium } = require('../controllers/premium')
+const { addTransaction, getTransactions, getTransaction, notification, deleteTransaction } = require("../controllers/transactions");
 
 const { musics, addMusic } = require('../controllers/music')
 const { register, login, checkAuth } = require("../controllers/auth");
@@ -15,9 +15,9 @@ router.post("/music", uploadFile(), addMusic);
 router.post('/artis', addArtis)
 router.get('/artiss', getArtis)
 
-router.post('/premium', addPremium)
-router.get('/premiumss', getPremium)
-
+router.get("/transactions", auth, getTransactions);
+router.post("/transaction", auth, addTransaction);
+router.delete("/transaction/:id", auth, deleteTransaction);
 router.post("/register", register);
 router.post("/login", login);
 router.get("/check-auth", auth, checkAuth);

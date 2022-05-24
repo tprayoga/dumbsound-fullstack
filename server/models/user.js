@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      user.hasMany(models.transaction, {
-        as: "userPayment",
-        foreignKey: "idBuyer",
-      })
+      user.hasOne(models.transaction, {
+        as: "transaction",
+        foreignKey: {
+          name: "userId",
+        },
+      });
       user.hasMany(models.chat, {
         as: "senderMessage",
         foreignKey: {
