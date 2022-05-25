@@ -19,6 +19,8 @@ router.get("/transactions", auth, getTransactions);
 router.post("/transaction", auth, addTransaction);
 router.delete("/transaction/:id", auth, deleteTransaction);
 router.post("/register", register);
+router.post("/notification", notification);
+
 router.post("/login", login);
 router.get("/check-auth", auth, checkAuth);
 

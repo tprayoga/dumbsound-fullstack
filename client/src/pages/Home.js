@@ -30,14 +30,14 @@ const Home = () => {
     const response = await API.get("/musics");
     return response.data.data.musics;
   });
-  let audioList = musics?.map((item, index) => {
-    return {
-      name: item.title,
-      singer: item.artis?.nama,
-      cover: item.thumbnail,
-      musicSrc: item.attache,
-    };
-  });
+  // let audioList = musics?.map((item, index) => {
+  //   return {
+  //     name: item.title,
+  //     singer: item.artis?.nama,
+  //     cover: item.thumbnail,
+  //     musicSrc: item.attache,
+  //   };
+  // });
 
   return (
     <div style={{ backgroundColor: "#161616" }}>

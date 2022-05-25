@@ -131,6 +131,7 @@ exports.addTransaction = async (req, res) => {
       customer_details: {
         full_name: buyerData?.name,
         email: buyerData?.email,
+        phone: buyerData?.phone,
       },
     };
 
@@ -144,9 +145,9 @@ exports.addTransaction = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(404).send({
       status: "Payment Failed",
-      message: "Disini",
+      message: "Server Error",
     });
   }
 };
@@ -188,32 +189,32 @@ exports.notification = async (req, res) => {
         // TODO set transaction status on your database to 'challenge'
         // and response with 200 OK
         // sendEmail("pending", orderId);
-        updateTransaction("Pending", orderId, false, statusResponse?.payment_type);
+        updateTransaction("pending", orderId, "Not Active", statusResponse?.payment_type);
         res.status(200);
       } else if (fraudStatus == "accept") {
         // TODO set transaction status on your database to 'success'
         // and response with 200 OK
         // sendEmail("success", orderId);
-        updateTransaction("success", orderId, true, statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
+        updateTransaction("success", orderId, "Active", statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
         res.status(200);
       }
     } else if (transactionStatus == "settlement") {
       // TODO set transaction status on your database to 'success'
       // and response with 200 OK
       // sendEmail("success", orderId);
-      updateTransaction("success", orderId, true, statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
+      updateTransaction("success", orderId, "Active", statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
       res.status(200);
     } else if (transactionStatus == "cancel" || transactionStatus == "deny" || transactionStatus == "expire") {
       // TODO set transaction status on your database to 'failure'
       // and response with 200 OK
       // sendEmail("failed", orderId);
-      updateTransaction("failed", orderId, false, statusResponse?.payment_type);
+      updateTransaction("failed", orderId, "Not Active", statusResponse?.payment_type);
       res.status(200);
-    } else if (transactionStatus == "Pending") {
+    } else if (transactionStatus == "pending") {
       // TODO set transaction status on your database to 'pending' / waiting payment
       // and response with 200 OK
       // sendEmail("pending", orderId);
-      updateTransaction("Pending", orderId, false, statusResponse?.payment_type);
+      updateTransaction("pending", orderId, "Not Active", statusResponse?.payment_type);
       res.status(200);
     }
   } catch (error) {
@@ -223,7 +224,7 @@ exports.notification = async (req, res) => {
 };
 
 // Create function for handle transaction update status
-const updateTransaction = async (status, transactionId, subscribe, paymentMethod, startDate, grossAmount) => {
+const updateTransaction = async (status, transactionId, statusPayment, startDate, grossAmount) => {
   try {
     await transaction.update(
       {
@@ -343,7 +344,7 @@ const updateTransaction = async (status, transactionId, subscribe, paymentMethod
     });
 
     await user.update(
-      { statusPayment: statusPayment },
+      { statusPayment: Active },
       {
         where: {
           id: getUserId.userId,
