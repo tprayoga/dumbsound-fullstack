@@ -8,8 +8,13 @@ import { UserContext } from "../context/userContext";
 const Pay = () => {
   const [state] = useContext(UserContext);
   console.log(state.user.statusPayment);
+  const [isAdmin, setIsAdmin] = useState(true);
+  useEffect(() => {
+    if (state.user.statusPayment === "Active") {
+      setIsAdmin(false);
+    }
+  });
   let navigate = useNavigate()
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   // Create config Snap payment with useEffect, untuk menampilkan modal pembayaran
   useEffect(() => {
@@ -31,12 +36,13 @@ const Pay = () => {
   }, []);
 
   const handleBuy = async (price) => {
-    setLoadingSubmit(true);
     try {
+      console.log(price);
       // Get data from product
       const data = {
         price: price,
       };
+    
 
       const body = JSON.stringify(data);
 
@@ -76,9 +82,7 @@ const Pay = () => {
           alert("you closed the popup without finishing the payment");
         },
       });
-      setLoadingSubmit(false);
     } catch (error) {
-      setLoadingSubmit(false);
       console.log(error);
     }
   };
@@ -96,7 +100,8 @@ const Pay = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        {state.user.statusPayment ? (        <>
+        {isAdmin ? (        
+        <>
           <Typography
             className="mb-4"
             sx={{ color: "#fff", fontSize: "36px", fontWeight: 700 }}
@@ -120,7 +125,7 @@ const Pay = () => {
             >
               SOUND
             </span>{" "}
-            : 0981312323
+            : Rp.20.000/Bulan
           </Typography>
           <div>
             <Button
@@ -138,7 +143,24 @@ const Pay = () => {
               Pay
             </Button>
           </div>
-        </>):(<>Happy Hacking</>)}
+        </>):(        <>
+          <Typography
+            className="mb-4"
+            sx={{ color: "#fff", fontSize: "36px", fontWeight: 700 }}
+          >
+            Enjoy
+          </Typography>
+          <Typography
+            className="mb-2"
+            sx={{ color: "#fff", fontSize: "15px", fontWeight: 400 }}
+          >
+             DUMB
+            <span style={{ color: "#EE4622" }}>SOUND</span>
+          </Typography>
+
+          <div>
+          </div>
+        </>)}
       </div>
     </div>
   );

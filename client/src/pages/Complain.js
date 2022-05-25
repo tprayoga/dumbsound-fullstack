@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "../styles/complain.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { UserContext } from "../context/userContext";
-
+import ChatIcon from '@mui/icons-material/Chat';
 import Chat from "../components/Chat";
 import Contact from "../components/Contact";
 
@@ -121,7 +121,7 @@ const Complain = () => {
 
   return (
     <>
-      <button class="open-button" onClick={handleClickChat}>User
+      <button class="open-button" onClick={handleClickChat}><ChatIcon/>
       </button>
       <div class="chat-popup" style={{ display: show ? "block" : "none" }} id="myForm">
         <div class="form-container">

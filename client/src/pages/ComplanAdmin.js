@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../styles/complain.css";
 import { Container, Row, Col } from "react-bootstrap";
-
+import ChatIcon from '@mui/icons-material/Chat';
 import Chat from "../components/Chat"
 import Contact from "../components/Contact";
 
@@ -121,7 +121,7 @@ const ComplainAdmin = () => {
 
   return (
     <>
-      <button class="open-button" onClick={handleClickChat}>Klik
+      <button class="open-button" onClick={handleClickChat}><ChatIcon/>
       </button>
       <div class="chat-popup" style={{ display: show ? "block" : "none" }} id="myForm">
         <div class="form-container">

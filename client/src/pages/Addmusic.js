@@ -147,7 +147,7 @@ const Addmusic = () => {
           >
   
             {artis.map((item)=>(
-              <option key={item.id} name="type" value={item.id}>{item.name}</option>
+              <option className="text-dark" key={item.id} name="type" value={item.id}>{item.name}</option>
             ))}
           </select>
           <label className="d-flex justify-content-around"

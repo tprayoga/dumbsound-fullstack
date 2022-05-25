@@ -189,32 +189,32 @@ exports.notification = async (req, res) => {
         // TODO set transaction status on your database to 'challenge'
         // and response with 200 OK
         // sendEmail("pending", orderId);
-        updateTransaction("pending", orderId, "Not Active", statusResponse?.payment_type);
+        updateTransaction("pending", orderId, "Not Active");
         res.status(200);
       } else if (fraudStatus == "accept") {
         // TODO set transaction status on your database to 'success'
         // and response with 200 OK
         // sendEmail("success", orderId);
-        updateTransaction("success", orderId, "Active", statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
+        updateTransaction("Approve", orderId, "Active", statusResponse?.transaction_time, statusResponse?.gross_amount);
         res.status(200);
       }
     } else if (transactionStatus == "settlement") {
       // TODO set transaction status on your database to 'success'
       // and response with 200 OK
       // sendEmail("success", orderId);
-      updateTransaction("success", orderId, "Active", statusResponse?.payment_type, statusResponse?.transaction_time, statusResponse?.gross_amount);
+      updateTransaction("Approve", orderId, "Active", statusResponse?.transaction_time, statusResponse?.gross_amount);
       res.status(200);
     } else if (transactionStatus == "cancel" || transactionStatus == "deny" || transactionStatus == "expire") {
       // TODO set transaction status on your database to 'failure'
       // and response with 200 OK
       // sendEmail("failed", orderId);
-      updateTransaction("failed", orderId, "Not Active", statusResponse?.payment_type);
+      updateTransaction("failed", orderId, "Not Active");
       res.status(200);
     } else if (transactionStatus == "pending") {
       // TODO set transaction status on your database to 'pending' / waiting payment
       // and response with 200 OK
       // sendEmail("pending", orderId);
-      updateTransaction("pending", orderId, "Not Active", statusResponse?.payment_type);
+      updateTransaction("pending", orderId, "Not Active");
       res.status(200);
     }
   } catch (error) {
@@ -288,6 +288,7 @@ const updateTransaction = async (status, transactionId, statusPayment, startDate
 
     // Kondisi untuk menentukan durasi
     let dueDate;
+    console.log("ini", grossAmount);
     if (grossAmount) {
       if (grossAmount === "7500.00") {
         dueDate = new Date(startDate);
@@ -344,7 +345,7 @@ const updateTransaction = async (status, transactionId, statusPayment, startDate
     });
 
     await user.update(
-      { statusPayment: Active },
+      { statusPayment: statusPayment },
       {
         where: {
           id: getUserId.userId,

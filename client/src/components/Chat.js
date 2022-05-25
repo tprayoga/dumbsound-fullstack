@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 export default function Chat({ contact, user, messages, sendMessage }) {
   // console.log("Message: ", messages);
   // console.log("user: ", user);

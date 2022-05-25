@@ -10,6 +10,7 @@ const Transactions = () => {
 
   let fetchTransaction = async () => {
     const response = await API.get("/transactions");
+    console.log(response);
     setTransactions(response.data.data);
   };
 
@@ -28,8 +29,6 @@ const Transactions = () => {
       // Delete Transaction
       const deleteTransaction = async () => {
         try {
-          console.log("Hapus Transaksi & ubah status user Berhasi!");
-
           const config = {
             headers: {
               Authorization: "Basic " + localStorage.token,
@@ -125,7 +124,7 @@ const Transactions = () => {
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{item.user.fullName}</td>
-                            <td>{remainingActive(item?.startDate, item?.dueDate, item.id, item.user?.id)}</td>
+                            <td>{remainingActive(item?.startDate, item?.dueDate, item.id, item.user?.id)}/Hari</td>
                             <td className={`status-${item.user.statusPayment}`}>{item.user.statusPayment}</td>
                             <td className={`status-${item.status}`}>{item.status}</td>
                         </tr>
