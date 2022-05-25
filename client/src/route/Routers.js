@@ -1,13 +1,13 @@
-import { Box, Button, Modal, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Login from '../components/Login'
 import Addartis from '../pages/Addartis'
 import Addmusic from '../pages/Addmusic'
 import Home from '../pages/Home'
 import Pay from '../pages/Pay'
 import Transactions from '../pages/Transactions'
-import MessageIcon from '@mui/icons-material/Message';
+import Complain from '../pages/Complain'
+import ComplainAdmin from '../pages/ComplanAdmin'
+import { UserContext } from '../context/userContext'
 
 const style = {
   position: 'absolute',
@@ -22,9 +22,7 @@ const style = {
 };
 
 const Routers = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [state] = useContext(UserContext)
   return (
     <>
     <Routes>
@@ -34,6 +32,7 @@ const Routers = () => {
       <Route path='/add-artis' element={<Addartis/>}/>
       <Route path='/transaction' element={<Transactions/>}/>
     </Routes>
+    {state.isLogin? state?.user?.status === "admin"? <ComplainAdmin/> : <Complain/> :<></>}
     </>
   )
 }

@@ -16,6 +16,7 @@
     "bootstrap": "^5.1.3",
     "cra-template-redux": "^2.0.0",
     "react": "^18.1.0",
+    "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
     "react-h5-audio-player": "^3.8.4",
     "react-jinke-music-player": "^4.24.2",
