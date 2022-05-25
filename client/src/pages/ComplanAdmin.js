@@ -21,8 +21,6 @@ const ComplainAdmin = () => {
     setShow(!show);
   }
 
-  const title = "Complain";
-  document.title = "DumbMerch | " + title;
 
   const [contact, setContact] = useState(null);
   const [contacts, setContacts] = useState([]);

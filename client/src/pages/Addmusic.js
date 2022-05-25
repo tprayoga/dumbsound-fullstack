@@ -61,12 +61,12 @@ const Addmusic = () => {
 
       if (response.data.status === "success") {
         const alert = (
-          <Alert>Register Berhasil</Alert>
+          <Alert>Add Music Berhasil</Alert>
         )
         setMessage(alert)
       }else{
         const alert = (
-          <Alert>Register Gagal</Alert>
+          <Alert>Gagal Add Music</Alert>
         )
         setMessage(alert)
       }

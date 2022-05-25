@@ -56,8 +56,7 @@ html {
   line-height: 1;
   width: 100%;
   padding: 10px 15px;
-  background-color: brown !important;
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  background-color:transparent !important;
 
 
 }
@@ -102,7 +101,7 @@ html {
 }
 
 .rhap_time {
-  color: red;
+  color: red !important;
   font-size: 16px;
   user-select: none;
   -webkit-user-select: none;
@@ -114,7 +113,7 @@ html {
   z-index: 0;
   width: 100%;
   height: 5px;
-  background-color: green;
+  background-color: green ;
   border-radius: 2px;
 }
 
@@ -122,7 +121,7 @@ html {
   height: 100%;
   position: absolute;
   z-index: 2;
-  background-color: yellow;
+  background-color: red !important;
   border-radius: 2px;
 }
 
@@ -132,7 +131,7 @@ html {
   height: 100%;
   position: absolute;
   z-index: 1;
-  background-color: blueviolet;
+  background-color: gainsboro !important;
   border-radius: 2px;
 }
 
@@ -144,7 +143,7 @@ html {
   height: 20px;
   margin-left: -10px;
   top: -8px;
-  background: orangered;
+  background: orangered !important;
   border-radius: 50px;
 }
 
@@ -165,7 +164,7 @@ html {
   font-size: 26px;
   width: 26px;
   height: 26px;
-  color: violet;
+  color: red !important;
   margin-right: 6px;
 }
 
@@ -178,7 +177,7 @@ html {
 
 .rhap_main-controls-button {
   margin: 0 3px;
-  color: blanchedalmond;
+  color:gainsboro !important;
   font-size: 35px;
   width: 35px;
   height: 35px;
@@ -203,7 +202,7 @@ html {
   font-size: 26px;
   width: 26px;
   height: 26px;
-  color: orange;
+  color:red;
   margin-right: 6px;
 }
 
@@ -221,7 +220,7 @@ html {
   position: relative;
   width: 100%;
   height: 4px;
-  background: darkcyan;
+  background: red !important;
   border-radius: 2px;
 }
 
@@ -231,9 +230,14 @@ html {
   height: 100%;
   position: absolute;
   z-index: 2;
-  background-color: rebeccapurple;
+  background-color: red !important;
   border-radius: 2px;
 }
 
 /* Utils */
 
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}

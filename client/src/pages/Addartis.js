@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import Navbar from "../components/Navbar";
 import { API } from '../config/api';
+import { Alert } from "@mui/material";
+
 
 
 const Addartis = () => {
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [message, setMessage] = useState(null);
   const [form, setForm] = useState({
     name:"",
     old:"",
@@ -19,10 +21,8 @@ const Addartis = () => {
     })
   }
   const handleSubmit = async (e) =>{
-    setLoadingSubmit(true)
     e.preventDefault();
     try {
-      setLoadingSubmit(false);
 
       const config = {
         headers: {
@@ -38,9 +38,19 @@ const Addartis = () => {
         type: "",
         startCareer: "",
       });
+      if (response.data.status === "success") {
+        const alert = (
+          <Alert>Add Artis Berhasil</Alert>
+        )
+        setMessage(alert)
+      }else{
+        const alert = (
+          <Alert>Gagal Add Artis</Alert>
+        )
+        setMessage(alert)
+      }
     } catch (error) {
       console.log(error);
-      setLoadingSubmit(false);
     }    
   }
   return (
@@ -49,7 +59,7 @@ const Addartis = () => {
         <Navbar />
       </div>
       <div className="container">
-
+      {message && message}
         <form className="mt-5 d-grid" onSubmit={(e) => handleSubmit(e)}>
         <h1 className="mb-4" style={{
             color: "white",

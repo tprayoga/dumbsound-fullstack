@@ -33,7 +33,7 @@ const Music = ({item, setMusicId}) => {
   return (
     <Card
       className="col-xs-1 m-1"
-      sx={{ width: "192px", height: "240px", backgroundColor: "#212529" }}>
+      sx={{ width: "192px", height: "255px", backgroundColor: "#212529" }}>
         {isLogin?(  <>  
         {active ? (<div>
           <CardActionArea onClick={() => setMusicId(item)} > 
