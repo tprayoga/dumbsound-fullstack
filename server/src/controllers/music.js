@@ -1,4 +1,5 @@
 const { music, artis } = require('../../models')
+const cloudinary = require("../../utils/cloudinary");
 
 exports.musics = async (req, res) => {
     try {
@@ -41,6 +42,11 @@ exports.musics = async (req, res) => {
 
 exports.addMusic = async (req, res) => {
     try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "dumbmerch_file",
+        use_filename: true,
+        unique_filename: false,
+      })
       const data = req.body;
       let newMusic = await music.create({
         ...data,
